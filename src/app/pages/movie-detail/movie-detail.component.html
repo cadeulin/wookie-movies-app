@@ -1,0 +1,26 @@
+<div class="movie-details-container" *ngIf="movie">
+  <img src="{{ movie.backdrop }}"/>
+  <div class="details">
+    <div class="header">
+      <h2>{{ movie.title }} ({{ movie.imdb_rating }}/10)</h2>
+      <div class="rating">
+        <ng-container *ngFor="let star of stars; let i = index">
+          <mat-icon [ngClass]="{ 'active': i < rating }" aria-hidden="false" aria-label="star">star</mat-icon>
+        </ng-container>
+      </div>
+    </div>
+   <p>
+     {{ movie.released_on | date: "yyyy"  }} |
+     {{ movie.length }} |
+     {{ movie.director }}
+  </p>
+    <p>
+      <span>Cast: </span>
+      <ng-container *ngFor="let cast of movie.cast; last as isLast">
+        <span>{{ cast }}</span>
+        <span *ngIf="!isLast">, </span>
+      </ng-container>
+    </p>
+    <p>{{ movie.overview }}</p>
+  </div>
+</div>

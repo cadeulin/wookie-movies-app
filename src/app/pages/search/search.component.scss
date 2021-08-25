@@ -1,0 +1,10 @@
+.search-container {
+  margin: 40px;
+
+  .movies {
+    display: flex;
+    align-items: stretch;
+    border-style: ridge;
+    overflow-x: auto;
+  }
+}

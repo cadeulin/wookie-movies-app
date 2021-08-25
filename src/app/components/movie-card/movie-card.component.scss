@@ -1,0 +1,24 @@
+.movie-card-container {
+
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+
+  img {
+    border: 1px solid #000;
+    width: 250px;
+    height: 150px;
+  }
+
+  .title {
+    border: 1px solid #000;
+    // border-top: 0;
+    word-wrap: break-word;
+    padding: 5px;
+
+    span {
+      font-weight: 500;
+    }
+  }
+
+}

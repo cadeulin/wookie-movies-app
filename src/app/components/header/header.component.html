@@ -1,0 +1,17 @@
+<div class="header-container">
+  <mat-toolbar color="primary">
+    <a routerLink="/">
+      <span>{{ title }}</span>
+    </a>
+    <form (keydown.enter)="search()">
+      <mat-icon aria-hidden="false" aria-label="search">search</mat-icon>
+      <input
+        class="form-control form-control-sm ml-3 w-75"
+        type="text"
+        placeholder="Search"
+        aria-label="Search"
+        [formControl]="searchForm"
+      />
+    </form>
+  </mat-toolbar>
+</div>

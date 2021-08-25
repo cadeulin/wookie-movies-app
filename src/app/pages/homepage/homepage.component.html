@@ -1,0 +1,12 @@
+<div class="homepage-container">
+  <ng-container *ngIf="categories">
+    <div *ngFor="let category of categories" class="category">
+      <h2>{{ category }}</h2>
+      <div class="movies">
+        <app-movie-card *ngFor="let movie of filterMovies(category)" [movie]="movie">
+        </app-movie-card>
+      </div>
+      <br>
+    </div>
+  </ng-container>
+</div>

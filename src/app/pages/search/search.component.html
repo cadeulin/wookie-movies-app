@@ -1,0 +1,10 @@
+<div class="search-container"  *ngIf="movies$ | async as movies">
+  <h2>Search Results</h2>
+  <div class="movies" *ngIf="movies.length > 0; else noResults">
+    <app-movie-card *ngFor="let movie of movies" [movie]="movie">
+    </app-movie-card>
+  </div>
+  <ng-template #noResults>
+    <p>No Results Found.</p>
+  </ng-template>
+</div>

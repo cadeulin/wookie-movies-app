@@ -1,0 +1,15 @@
+.header-container {
+  mat-toolbar {
+    display: flex;
+    justify-content: space-between;
+
+    a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    mat-icon {
+      vertical-align: middle;
+    }
+  }
+}
