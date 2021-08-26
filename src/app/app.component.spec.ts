@@ -1,24 +1,19 @@
-import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { MoviesFacade } from './stores/movies/movies.facade';
 
 describe('AppComponent', () => {
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        AppComponent
-      ],
-    }).compileComponents();
-  }));
+  let component: AppComponent,
+  mockMoviesFacade: jasmine.SpyObj<MoviesFacade>;
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+  beforeEach(() => {
+    mockMoviesFacade = jasmine.createSpyObj('MoviesFacade', ['loadMovies']);
+    component = new AppComponent(mockMoviesFacade);
   });
 
-  it(`should have as title 'wookie-movies-app'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('wookie-movies-app');
+  describe('#ngOnInit', () => {
+    it('should load movies', () => {
+      component.ngOnInit();
+      expect(mockMoviesFacade.loadMovies).toHaveBeenCalled();
+    });
   });
 });

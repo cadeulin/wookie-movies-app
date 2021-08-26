@@ -17,6 +17,10 @@ import { MovieDetailComponent } from './pages/movie-detail/movie-detail.componen
 import { MovieCardComponent } from './components/movie-card/movie-card.component';
 import { SearchComponent } from './pages/search/search.component';
 import { StoreModule } from '@ngrx/store';
+import { reducers, reducerToken } from './stores/reducer-entry';
+import { Stores } from './stores/stores.entry';
+import { EffectsModule } from '@ngrx/effects';
+import { MoviesEffects } from './stores/movies/movies.effects';
 
 const MaterialComponents = [
   MatToolbarModule,
@@ -39,9 +43,13 @@ const MaterialComponents = [
     HttpClientModule,
     ReactiveFormsModule,
     FormsModule,
+    StoreModule.forRoot(reducerToken),
+    EffectsModule.forRoot([MoviesEffects]),
     MaterialComponents
   ],
   providers: [
+    Stores,
+    { provide: reducerToken, useValue: reducers },
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]

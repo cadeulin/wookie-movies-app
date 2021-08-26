@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
+import { map, take, tap } from 'rxjs/operators';
 import { Movie } from 'src/app/models/movie';
-import { MoviesService } from 'src/app/services/movies.service';
+import { MoviesFacade } from 'src/app/stores/movies/movies.facade';
 
 @Component({
   selector: 'app-movie-detail',
@@ -9,22 +11,26 @@ import { MoviesService } from 'src/app/services/movies.service';
   styleUrls: ['./movie-detail.component.scss']
 })
 export class MovieDetailComponent implements OnInit {
+  movie$: Observable<Movie>;
   rating: number;
-  movie: Movie;
   stars = [1, 2, 3, 4, 5];
 
   constructor(
     private route: ActivatedRoute,
-    private moviesService: MoviesService
+    private moviesFacade: MoviesFacade
   ) { }
 
   ngOnInit(): void {
-    this.moviesService.getMovies().subscribe((response) => {
-      const movies = response.movies;
-      const movieId = this.route.snapshot.url[1].path;
-      this.movie = movies.filter((e) => e.id === movieId)[0];
-      this.rating = Math.round((this.movie.imdb_rating * 5) / 10);
-    });
+    const movieId = this.route.snapshot.url[1].path;
+    this.movie$ = this.moviesFacade.getMovieById(movieId).pipe(
+      take(1),
+      tap((movie: Movie) => {
+        this.rating = Math.round((movie.imdb_rating * 5) / 10);
+      }),
+      map((movie: Movie) => {
+        return movie;
+      })
+    );
   }
 
 }

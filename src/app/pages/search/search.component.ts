@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
 import { Observable } from 'rxjs';
-import { switchMap, map, distinctUntilChanged } from 'rxjs/operators';
-import { Movie, Movies } from 'src/app/models/movie';
-import { MoviesService } from 'src/app/services/movies.service';
+import { map } from 'rxjs/operators';
+import { Movie } from 'src/app/models/movie';
 import { sortBy } from 'lodash';
+import { MoviesFacade } from 'src/app/stores/movies/movies.facade';
 
 @Component({
   selector: 'app-search',
@@ -15,16 +14,13 @@ export class SearchComponent implements OnInit {
   movies$: Observable<Movie[]>;
 
   constructor(
-    private route: ActivatedRoute,
-    private moviesService: MoviesService
+    private moviesFacade: MoviesFacade
   ) { }
 
   ngOnInit(): void {
-    this.movies$ = this.route.queryParams.pipe(
-      distinctUntilChanged(),
-      switchMap((params: Params) => this.moviesService.searchMovie(params['searchQuery'])),
-      map((response: Movies) => {
-        return sortBy(response.movies, 'title');
+    this.movies$ = this.moviesFacade.getSearchMovies().pipe(
+      map((response: Movie[]) => {
+        return sortBy(response, 'title');
       })
     );
   }
