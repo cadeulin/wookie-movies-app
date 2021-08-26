@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { take } from 'rxjs/operators';
-import { Movie, Movies } from 'src/app/models/movie';
-import { MoviesService } from 'src/app/services/movies.service';
-import { sortBy, flattenDeep, uniq, map, filter } from 'lodash';
+import { take, filter } from 'rxjs/operators';
+import { Movie, } from 'src/app/models/movie';
+import { sortBy, flattenDeep, uniq, map, isEmpty, filter as _filter } from 'lodash';
+import { MoviesFacade } from 'src/app/stores/movies/movies.facade';
 
 export interface SortedMovies {
   category: string;
@@ -19,21 +19,22 @@ export class HomepageComponent implements OnInit {
   categories: string[];
 
   constructor(
-    private moviesService: MoviesService
+    private moviesFacade: MoviesFacade
   ) { }
 
   ngOnInit(): void {
-    this.moviesService.getMovies()
-      .pipe(take(1))
-      .subscribe((response: Movies) => {
-        const movies = response.movies
-        this.movies = movies;
-        this.categories = sortBy(uniq(flattenDeep(map(movies, 'genres'))));
-      });
+    this.moviesFacade.getMovies().pipe(
+      filter((movies: Movie[]) => !isEmpty(movies)),
+      take(1)
+    ).subscribe((response: Movie[]) => {
+      const movies = response;
+      this.movies = movies;
+      this.categories = sortBy(uniq(flattenDeep(map(movies, 'genres'))));
+    });
   }
 
   filterMovies(category: string): Movie[] {
-    const filteredMovies = filter(this.movies, (movie: Movie) => {
+    const filteredMovies = _filter(this.movies, (movie: Movie) => {
       return movie.genres.includes(category);
     });
     return sortBy(filteredMovies, 'title');

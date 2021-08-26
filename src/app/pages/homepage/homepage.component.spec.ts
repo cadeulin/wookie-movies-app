@@ -1,21 +1,23 @@
 import { of } from 'rxjs';
-import { MoviesService } from 'src/app/services/movies.service';
+import { Movie } from 'src/app/models/movie';
+import { MoviesFacade } from 'src/app/stores/movies/movies.facade';
 import { HomepageComponent } from './homepage.component';
 
 describe('HomepageComponent', () => {
   let component: HomepageComponent,
-    mockMoviesService: jasmine.SpyObj<MoviesService>;
+    mockMoviesFacade: jasmine.SpyObj<MoviesFacade>;
+
+  const mockMovies: Movie[] = [
+    <any> {
+      title: 'test'
+    }
+  ];
 
   beforeEach(() => {
-    mockMoviesService = jasmine.createSpyObj('MoviesService', ['getMovies']);
-    mockMoviesService.getMovies.and.returnValue(of(
-      {
-        movies: [<any> {
-          genres: ['test']
-        }]
-      }));
+    mockMoviesFacade = jasmine.createSpyObj('mockMoviesFacade', ['getMovies']);
+    mockMoviesFacade.getMovies.and.returnValue(of(mockMovies));
 
-    component = new HomepageComponent(mockMoviesService);
+    component = new HomepageComponent(mockMoviesFacade);
   });
 
   describe('#ngOnInit', () => {

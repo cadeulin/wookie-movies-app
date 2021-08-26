@@ -1,39 +1,24 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
-import { Movies } from 'src/app/models/movie';
-import { MoviesService } from 'src/app/services/movies.service';
+import { Movie } from 'src/app/models/movie';
+import { MoviesFacade } from 'src/app/stores/movies/movies.facade';
 
 import { SearchComponent } from './search.component';
 
 describe('SearchComponent', () => {
   let component: SearchComponent,
-    fixture: ComponentFixture<SearchComponent>,
-    mockMoviesService: jasmine.SpyObj<MoviesService>;
+    mockMoviesFacade: jasmine.SpyObj<MoviesFacade>;
 
-  const mockMovies: Movies = {
-    movies: [ <any> {
+  const mockMovies: Movie[] = [
+    <any> {
       title: 'test'
-    }]
-  };
-
-  beforeEach(async(() => {
-    mockMoviesService = jasmine.createSpyObj('MoviesService', ['searchMovie']);
-    mockMoviesService.searchMovie.and.returnValue(of(mockMovies));
-
-    TestBed.configureTestingModule({
-      declarations: [ SearchComponent ],
-      providers: [
-        { provide: ActivatedRoute, useValue: { queryParams: of({ searchQuery: 'test'}) } },
-        { provide: MoviesService, useValue: mockMoviesService }
-      ]
-    }).compileComponents();
-  }));
+    }
+  ];
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SearchComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    mockMoviesFacade = jasmine.createSpyObj('MoviesFacade', ['getSearchMovies']);
+    mockMoviesFacade.getSearchMovies.and.returnValue(of(mockMovies));
+
+    component = new SearchComponent(mockMoviesFacade);
   });
 
   describe('#ngOnInit', () => {

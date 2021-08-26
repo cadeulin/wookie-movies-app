@@ -1,4 +1,4 @@
-<div class="movie-details-container" *ngIf="movie">
+<div class="movie-details-container" *ngIf="movie$ | async as movie">
   <img src="{{ movie.backdrop }}"/>
   <div class="details">
     <div class="header">
